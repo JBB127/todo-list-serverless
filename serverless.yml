@@ -22,8 +22,14 @@ provider:
 
     - Effect: Allow
       Action:
-         - translate:TranslateText
-         - comprehend:DetectDominantLanguage
+        - comprehend:BatchDetectDominantLanguage
+        - comprehend:DetectDominantLanguage
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - translate:TranslateText
+        - cloudwatch:GetMetricStatistics
+        - cloudwatch:ListMetrics
       Resource: "*"
                                               
 functions:
@@ -65,6 +71,14 @@ functions:
       - http:
           path: todos/{id}
           method: delete
+          cors: true
+
+  translate:
+    handler: todos/getTranslate.get
+    events:
+      - http:
+          path: todos/{id}/{lang}
+          method: get
           cors: true
 
 resources:
